@@ -46,7 +46,7 @@ try {
   await page.screenshot({ path: "release/windows-smoke.png", fullPage: true });
   console.log(
     "Scene fallback:",
-    await page.locator(".scene-error").allTextContents(),
+    await page.locator(".scene > .scene-error").allTextContents(),
   );
   console.log(
     "WebGL:",
@@ -62,9 +62,20 @@ try {
     }),
   );
   assert.equal(
-    await page.locator(".scene-error").count(),
+    await page.locator(".scene > .scene-error").count(),
     0,
     "Falló la escena 3D.",
+  );
+  // Canvas keeps its non-rendered HTML fallback inside <canvas>. Counting it
+  // would report an error even when WebGL is drawing normally. Check the actual
+  // boundary fallback above and the renderer's live WebGL2 context instead.
+  assert.equal(
+    await page.locator("canvas").evaluate((canvas) => {
+      const gl = canvas.getContext("webgl2");
+      return Boolean(gl && !gl.isContextLost() && gl.getParameter(gl.VERSION));
+    }),
+    true,
+    "El renderizador no tiene un contexto WebGL2 activo.",
   );
   assert.equal(
     await page.evaluate(() => typeof window.require),
@@ -92,7 +103,7 @@ try {
   await page.screenshot({ path: "release/windows-smoke.png", fullPage: true });
   assert.deepEqual(errors, []);
   console.log(
-    "Windows: ejecutable, oficina 3D, aislamiento y eventos verificados.",
+    "Aplicación de escritorio: oficina 3D, aislamiento y eventos verificados.",
   );
 } finally {
   // Disconnect CDP; the workflow owns the launched desktop process.
