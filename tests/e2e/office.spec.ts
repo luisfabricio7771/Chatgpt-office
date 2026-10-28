@@ -104,10 +104,10 @@ test("objects in the actual 3D scene respond to clicks", async ({ page }) => {
       bounds.y + ((1 - p.y) / 2) * bounds.height,
     );
   }
-  await clickWorld([0.25, 2.24, 0.37]);
+  await clickWorld([-0.35, 2.38, -0.05]);
   await expect(page.locator(".speech")).toBeVisible();
   await page.getByRole("button", { name: "Cerrar diálogo" }).click();
-  await clickWorld([-1.05, 2.45, -1.79]);
+  await clickWorld([-1.5, 2.78, -1.79]);
   await expect(
     page.getByRole("region", { name: "Actividad de BYTE" }),
   ).toBeVisible();

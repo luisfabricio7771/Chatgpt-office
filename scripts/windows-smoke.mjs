@@ -40,6 +40,19 @@ try {
     .locator(".connect-card small")
     .filter({ hasText: "Adaptador local conectado" })
     .waitFor();
+  await page.evaluate(() => document.fonts.ready);
+  const typography = await page.locator(".quote").evaluate((el) => ({
+    family: getComputedStyle(el).fontFamily,
+    size: Number.parseFloat(getComputedStyle(el).fontSize),
+    loaded: [...document.fonts].some(
+      (face) =>
+        face.family.replace(/["']/g, "") === "DM Sans Variable" &&
+        face.status === "loaded",
+    ),
+  }));
+  assert.match(typography.family, /DM Sans Variable/);
+  assert.ok(typography.loaded, "La fuente instalada debe cargarse realmente.");
+  assert.ok(typography.size >= 14, "El diálogo de BYTE debe poder leerse.");
   await page.waitForTimeout(1500);
   await mkdir("release", { recursive: true });
   await page.screenshot({ path: "release/windows-smoke.png", fullPage: true });
@@ -85,6 +98,7 @@ try {
     await page.locator(".card-footer").innerText(),
     /1 tareas reales/,
   );
+  await page.waitForTimeout(1200);
   await mkdir("release", { recursive: true });
   await page.screenshot({ path: "release/windows-smoke.png", fullPage: true });
   assert.deepEqual(errors, []);

@@ -468,7 +468,7 @@ function App() {
           <button onClick={() => setConnect(true)}>
             <Icon name="info" size={13} /> Acerca del proyecto
           </button>
-          <span className="version">v0.1</span>
+          <span className="version">v0.1.1</span>
         </span>
       </footer>
       {cinema && (

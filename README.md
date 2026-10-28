@@ -4,7 +4,7 @@ Una oficina virtual 3D con un pequeño robot, luces cálidas y espacio para las 
 
 ## Aplicación de Windows (.exe)
 
-La distribución de escritorio es **BYTE-HQ-0.1.0-Windows-x64.exe**, un ejecutable portátil para Windows 10/11 de 64 bits. No necesita instalar Node.js ni iniciar una terminal: abre el archivo con doble clic. Incluye la interfaz 3D y el adaptador local. Las preferencias se conservan en el perfil local de la aplicación.
+La distribución de escritorio es **BYTE-HQ-0.1.1-Windows-x64.exe**, un ejecutable portátil para Windows 10/11 de 64 bits. No necesita instalar Node.js ni iniciar una terminal: abre el archivo con doble clic. Incluye la interfaz 3D y el adaptador local. Las preferencias se conservan en el perfil local de la aplicación.
 
 Al abrirse, la aplicación inicia el adaptador en `127.0.0.1:8787`; los ejemplos de eventos de este documento funcionan sin cambios. Al cerrar la ventana, también cierra su adaptador. Solo se permite una instancia: abrirla de nuevo enfoca la ventana existente. Si el puerto está ocupado por `npm run dev` u otra herramienta, cierra ese proceso antes de iniciar el ejecutable. El ejecutable no está firmado con un certificado de editor y Windows puede mostrar un aviso de editor desconocido.
 
@@ -19,7 +19,7 @@ El resultado se guarda en `release`. Para probar la ventana de Electron desde el
 
 ## Descargar desde GitHub Actions
 
-En GitHub abre **Actions → BYTE HQ — ejecutable de Windows**, selecciona la ejecución más reciente que haya terminado correctamente y descarga **BYTE-HQ-Windows-x64** en la sección **Artifacts**. Inicia sesión con tu cuenta de GitHub para descargarlo. Extrae el ZIP y abre el archivo `BYTE-HQ-0.1.0-Windows-x64.exe`; no necesitas instalar Node.js.
+En GitHub abre **Actions → BYTE HQ — ejecutable de Windows**, selecciona la ejecución más reciente que haya terminado correctamente y descarga **BYTE-HQ-Windows-x64** en la sección **Artifacts**. Inicia sesión con tu cuenta de GitHub para descargarlo. Extrae el ZIP y abre el archivo `BYTE-HQ-0.1.1-Windows-x64.exe`; no necesitas instalar Node.js.
 
 El flujo de la rama `codex/byte-hq-windows` compila el ejecutable en Windows, abre esa aplicación real, comprueba la escena y un evento externo, y guarda una captura junto al ejecutable. La descarga de Actions se conserva durante 30 días y se puede regenerar ejecutando el flujo de nuevo. El campo de resultados de cada ejecución muestra si la comprobación nativa pasó o falló.
 

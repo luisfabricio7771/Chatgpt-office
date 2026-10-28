@@ -479,20 +479,6 @@ export function Office({
           decay={2}
         />
       </group>
-      {/* Comfortable chair, deliberately lower than BYTE's silhouette. */}
-      <Block at={[0.25, 1.19, 0]} size={[0.95, 0.17, 0.86]} color="#273843" />
-      <Block at={[0.25, 1.51, 0.38]} size={[0.9, 0.65, 0.16]} color="#243a48" />
-      <Block at={[0.25, 0.6, 0]} size={[0.11, 1, 0.11]} color="#79918e" />
-      <Block at={[0.25, 0.18, 0]} size={[1.1, 0.08, 0.14]} color="#263c47" />
-      <Block at={[0.25, 0.18, 0]} size={[0.14, 0.08, 1.05]} color="#263c47" />
-      {[-0.3, 0.8].map((x) => (
-        <Block
-          key={x}
-          at={[x, 0.13, 0]}
-          size={[0.14, 0.14, 0.18]}
-          color="#152732"
-        />
-      ))}
       {/* Left wall shelving with books, tiny console and RPG relic. */}
       <group position={[-3.22, 0, -1.75]}>
         {[1.95, 2.88, 3.76].map((y) => (
