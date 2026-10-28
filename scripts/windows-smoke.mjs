@@ -35,7 +35,6 @@ try {
   page.on("console", (message) =>
     console.log(`[renderer ${message.type()}] ${message.text()}`),
   );
-  await page.reload();
   await page.locator("canvas").waitFor({ state: "visible", timeout: 30000 });
   await page
     .locator(".connect-card small")
@@ -47,19 +46,6 @@ try {
   console.log(
     "Scene fallback:",
     await page.locator(".scene > .scene-error").allTextContents(),
-  );
-  console.log(
-    "WebGL:",
-    await page.evaluate(() => {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl2");
-      return gl
-        ? {
-            version: gl.getParameter(gl.VERSION),
-            renderer: gl.getParameter(gl.RENDERER),
-          }
-        : { available: false };
-    }),
   );
   assert.equal(
     await page.locator(".scene > .scene-error").count(),
