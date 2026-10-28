@@ -32,12 +32,35 @@ try {
   assert.ok(page, "La aplicación no cargó la oficina local.");
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) =>
+    console.log(`[renderer ${message.type()}] ${message.text()}`),
+  );
+  await page.reload();
   await page.locator("canvas").waitFor({ state: "visible", timeout: 30000 });
   await page
     .locator(".connect-card small")
     .filter({ hasText: "Adaptador local conectado" })
     .waitFor();
   await page.waitForTimeout(1500);
+  await mkdir("release", { recursive: true });
+  await page.screenshot({ path: "release/windows-smoke.png", fullPage: true });
+  console.log(
+    "Scene fallback:",
+    await page.locator(".scene-error").allTextContents(),
+  );
+  console.log(
+    "WebGL:",
+    await page.evaluate(() => {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl2");
+      return gl
+        ? {
+            version: gl.getParameter(gl.VERSION),
+            renderer: gl.getParameter(gl.RENDERER),
+          }
+        : { available: false };
+    }),
+  );
   assert.equal(
     await page.locator(".scene-error").count(),
     0,

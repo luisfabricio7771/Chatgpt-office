@@ -30,7 +30,7 @@ jobs:
         run: |
           $exe = Get-ChildItem release/BYTE-HQ-*-Windows-x64.exe | Select-Object -First 1
           if (-not $exe) { throw 'No se generó el ejecutable.' }
-          $process = Start-Process -FilePath $exe.FullName -ArgumentList '--remote-debugging-port=9222','--use-angle=swiftshader','--enable-unsafe-swiftshader' -PassThru
+          $process = Start-Process -FilePath $exe.FullName -ArgumentList '--remote-debugging-port=9222','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist' -PassThru
           try {
             node scripts/windows-smoke.mjs
             if ($LASTEXITCODE -ne 0) { throw 'La prueba nativa falló.' }
