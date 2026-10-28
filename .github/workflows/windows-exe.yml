@@ -1,0 +1,68 @@
+name: BYTE HQ — ejecutable de Windows
+
+on:
+  push:
+    branches: [codex/byte-hq-windows]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Compilar y comprobar el .exe
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Pruebas de lógica y servidores
+        run: npm test
+      - name: Generar ejecutable portátil de Windows x64
+        run: npm run dist:win
+      - name: Probar el ejecutable real en Windows
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem release/BYTE-HQ-*-Windows-x64.exe | Select-Object -First 1
+          if (-not $exe) { throw 'No se generó el ejecutable.' }
+          $process = Start-Process -FilePath $exe.FullName -ArgumentList '--remote-debugging-port=9222','--use-angle=swiftshader','--enable-unsafe-swiftshader' -PassThru
+          try {
+            node scripts/windows-smoke.mjs
+            if ($LASTEXITCODE -ne 0) { throw 'La prueba nativa falló.' }
+          } finally {
+            Get-Process -Name 'BYTE HQ' -ErrorAction SilentlyContinue | Stop-Process -Force
+            if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+          }
+      - name: Crear comprobantes y paquete de código fuente
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem release/BYTE-HQ-*-Windows-x64.exe | Select-Object -First 1
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash.ToLower()
+          "$hash  $($exe.Name)" | Set-Content release/SHA256.txt
+          git archive --format=zip --output=release/BYTE-HQ-codigo-fuente.zip HEAD
+      - name: Guardar descarga del ejecutable
+        uses: actions/upload-artifact@v4
+        with:
+          name: BYTE-HQ-Windows-x64
+          path: |
+            release/BYTE-HQ-*-Windows-x64.exe
+            release/SHA256.txt
+            release/BYTE-HQ-codigo-fuente.zip
+            release/windows-smoke.png
+          if-no-files-found: error
+          retention-days: 30
+      - name: Guardar diagnóstico si algo falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BYTE-HQ-diagnostico-Windows
+          path: |
+            release/windows-smoke.png
+            release/builder-debug.yml
+          if-no-files-found: ignore
+          retention-days: 14
