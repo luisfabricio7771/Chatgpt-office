@@ -1,0 +1,76 @@
+{
+  "name": "byte-hq",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite --host 0.0.0.0",
+    "adapter": "node scripts/adapter.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run && node --test tests/adapter.test.mjs tests/desktop-server.test.mjs",
+    "test:e2e": "playwright test",
+    "desktop": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.1.0",
+    "electron-builder": "^26.18.0",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.186.1"
+  },
+  "main": "desktop/main.cjs",
+  "description": "BYTE HQ — Tu pequeña oficina virtual 3D",
+  "author": "BYTE HQ",
+  "build": {
+    "appId": "com.bytehq.office",
+    "productName": "BYTE HQ",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "scripts/adapter-server.mjs",
+      "package.json"
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "desktop/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "BYTE-HQ-${version}-Windows-x64.${ext}",
+      "requestExecutionLevel": "user"
+    },
+    "compression": "normal"
+  }
+}
